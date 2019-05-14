@@ -13,10 +13,10 @@ public class Simulation {
   private FaultySensorSim faultySens;
   private double sensorNom;       //nominal value -- random-walks
   private final double sensorErr; //fixed
-  private ArrayList<Double> readings = new ArrayList<Double>();
-  private float mean;
-  private float iterations;
-  private float total;
+  //private ArrayList<Double> readings = new ArrayList<Double>();
+  private int iterations;
+  private double total;
+  private double mean;
 
   public Simulation(double n, double e, int regSens, int faultySens) { //constructor
     sensorNom = n;
@@ -59,10 +59,11 @@ public class Simulation {
       
     }*/
     
-    while(true) {           
+    while(true) {
+      iterations++;           
       double rdg = 0;
-      double standardDeviation = 0;
-      double squared = 0;
+      //double standardDeviation = 0;
+      //double squared = 0;
       
       // Get readings from sensors
       for(int i = 0; i < sensors.length; i++) {
@@ -71,6 +72,11 @@ public class Simulation {
       
       // Get avg rdg value
       rdg = rdg/sensors.length;
+      
+      // Get mean rdg for all readings
+      
+      
+      
       
       //iterations ++;
       //total += rdg;
@@ -103,9 +109,9 @@ public class Simulation {
 
   public static void main(String[] args) {
     if (args.length < 2) {
-      System.out.println("Using defaults initial nominal = 100.0, noise = 5.0");
+      System.out.println("Using defaults initial nominal = 100.0, noise = 5.0, regular sensors = 1, faulty sensors = 0");
       System.out.println("For other settings use java Simulation <nom> <noise> <regSens> <faultySens>");
-      new Simulation(100, 5, 1, 1);
+      new Simulation(100, 5, 1, 0);
     }
     else {
 	new Simulation(Double.parseDouble(args[0]), Double.parseDouble(args[1]),Integer.parseInt(args[2]),Integer.parseInt(args[3]));
