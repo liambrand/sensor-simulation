@@ -41,7 +41,6 @@ public class Simulation {
     }
     
     System.out.println("READING \t| NOM \t| DEVIATION \t| MEAN \t| STD DEVIATION");
-    //System.out.println("READING \t| NOM \t| DEVIATION \t| MEAN \t|");
     
     while(true) {
       iterations++;           
