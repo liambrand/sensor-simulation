@@ -48,10 +48,19 @@ public class Simulation {
       double total = 0;
       double mean = 0;
       double standardDeviation = 0;
-      
+
       // Get readings from sensors
+      ArrayList<Double> currentReadings = null;
       for(int i = 0; i < sensors.length; i++) {
-        rdg =+ sensors[i].getRdg();
+        //rdg =+ sensors[i].getRdg();
+         currentReadings.add(sensors[i].getRdg());
+      }
+
+      // Run checker to purge erronous values
+      currentReadings = checker(currentReadings);
+
+      for(Double reading: currentReadings) {
+        rdg += reading;
       }
       
       // Get avg rdg value
@@ -95,13 +104,33 @@ public class Simulation {
 
 
   // Method to check readings for erronous values
-  private double[] checker(double[] readings) {
+  private ArrayList<Double> checker(ArrayList<Double> readings) {
+    int errReading = -1;
     double avg = 0;
 
-    for(double reading: readings) {
-      reading += avg;
+    for(int i = 0; i < readings.size(); i++) {
+      // Create a list of readings, minus whatever reading is being checked
+      ArrayList<Double> toCompare = readings;
+      double toCheck = readings.get(i);
+      toCompare.remove(i);
+        
+      // Get avg of all other readings
+      for(Double reading: toCompare) {
+        avg += reading;
+      }
+      avg = avg/toCompare.size();
+
+      // If checked value has a diff of more than 2*sensor noise, flag it's location in array
+      if(toCheck > avg + (2*sensorErr) || toCheck < avg - (2*sensorErr)) {
+        errReading = i;
+      }
     }
-    avg = avg/readings.length;
+
+    // Remove erronous reading if one has been flagged
+    if(errReading != -1) {
+      readings.remove(errReading);
+    }
+
     return readings;
   }
 
