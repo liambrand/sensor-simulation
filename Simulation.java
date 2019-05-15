@@ -13,10 +13,6 @@ public class Simulation {
   private FaultySensorSim faultySens;
   private double sensorNom;       //nominal value -- random-walks
   private final double sensorErr; //fixed
-  //private ArrayList<Double> readings = new ArrayList<Double>();
-  private int iterations;
-  private double total;
-  private double mean;
 
   public Simulation(double n, double e, int regSens, int faultySens) { //constructor
     sensorNom = n;
@@ -27,8 +23,9 @@ public class Simulation {
 
   public void runSimulation(int regSens, int faultySens)  {
     Random rng = new Random();
-
     SensorSim[] sensors = new SensorSim[regSens + faultySens];
+    int iterations = 0;
+    ArrayList<Double> readings = new ArrayList<Double>();
     
     // Create sensors
     for(int i = 0; i < sensors.length; i++) {
@@ -43,27 +40,15 @@ public class Simulation {
       sensors[i].start();
     }
     
-    //System.out.println("READING \t| NOM \t| DEVIATION \t| MEAN \t| STD DEVIATION");
-    System.out.println("READING \t| NOM \t| DEVIATION |");
-    
-    
-    /*while(true) {
-      double rdg = 0;
-      double standardDeviation = 0;
-      double s = 0;
-      
-      // Get readings from sensors
-      for(int i = 0; i < sensors.length; i++) {
-        rdg =+ sensors[i].getRdg();
-      }
-      
-    }*/
+    System.out.println("READING \t| NOM \t| DEVIATION \t| MEAN \t| STD DEVIATION");
+    //System.out.println("READING \t| NOM \t| DEVIATION \t| MEAN \t|");
     
     while(true) {
       iterations++;           
       double rdg = 0;
-      //double standardDeviation = 0;
-      //double squared = 0;
+      double total = 0;
+      double mean = 0;
+      double standardDeviation = 0;
       
       // Get readings from sensors
       for(int i = 0; i < sensors.length; i++) {
@@ -72,25 +57,27 @@ public class Simulation {
       
       // Get avg rdg value
       rdg = rdg/sensors.length;
+      readings.add(rdg);
       
       // Get mean rdg for all readings
-      
-      
-      
-      
-      //iterations ++;
-      //total += rdg;
-      //mean = total / iterations;
-        
-      //double meanTakeaway = rdg - mean;
-	    //squared += meanTakeaway * meanTakeaway;
-      //standardDeviation = squared / iterations;
-	    //standardDeviation = Math.sqrt(standardDeviation);
-	    
-	    System.out.printf("%7.2f \t(%5.1f): \t%4.1f\n", rdg, sensorNom, rdg-sensorNom);
+      for(double reading: readings) {
+        total += reading;
+        mean = total/iterations;
+      }
+
+      // Get standard deviation
+      double squaredDiff = 0;
+      for(double reading: readings) {
+        // Subtract the mean, square the result
+        double subtractMean = reading - mean;
+        squaredDiff += subtractMean*subtractMean;
+        // Get mean of squared differences and square root
+        standardDeviation = squaredDiff/iterations;
+        standardDeviation = Math.sqrt(standardDeviation);
+      }
               
 
-      //System.out.printf("%7.2f \t(%5.1f): \t%4.1f \t%4.1f  \t%4.1f\n", rdg, sensorNom, rdg-sensorNom, mean, standardDeviation);
+      System.out.printf("%7.2f \t(%5.1f): \t%4.1f \t%4.2f  \t%4.2f\n", rdg, sensorNom, rdg-sensorNom, mean, standardDeviation);
 
       //sensor:output(nominal):difference on console; can be redirected to log
       display.update(rdg, sensorNom); 
