@@ -51,7 +51,7 @@ public class Simulation {
       
       // Get readings from sensors
       for(int i = 0; i < sensors.length; i++) {
-        rdg =+ sensors[i].getRdg();
+        rdg += sensors[i].getRdg();
       }
       
       // Get avg rdg value
@@ -91,6 +91,10 @@ public class Simulation {
         Thread.sleep(500);
       } catch (InterruptedException ix) {}
    }
+  }
+
+  private void checker(SensorSim[] sensors) {
+
   }
 
   public static void main(String[] args) {
