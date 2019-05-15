@@ -93,10 +93,6 @@ public class Simulation {
    }
   }
 
-  private void checker(SensorSim[] sensors) {
-
-  }
-
   public static void main(String[] args) {
     if (args.length < 2) {
       System.out.println("Using defaults initial nominal = 100.0, noise = 5.0, regular sensors = 1, faulty sensors = 0");
