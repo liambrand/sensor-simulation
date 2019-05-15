@@ -93,6 +93,18 @@ public class Simulation {
    }
   }
 
+
+  // Method to check readings for erronous values
+  private double[] checker(double[] readings) {
+    double avg = 0;
+
+    for(double reading: readings) {
+      reading += avg;
+    }
+    avg = avg/readings.length;
+    return readings;
+  }
+
   public static void main(String[] args) {
     if (args.length < 2) {
       System.out.println("Using defaults initial nominal = 100.0, noise = 5.0, regular sensors = 1, faulty sensors = 0");
