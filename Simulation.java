@@ -35,7 +35,7 @@ public class Simulation {
       }
       // Faulty sensors
       else {
-        sensors[i] = new FaultySensorSim(sensorNom, sensorErr, 100, 30);
+        sensors[i] = new FaultySensorSim(sensorNom, sensorErr, 10000, 200);
       }
       sensors[i].start();
     }
